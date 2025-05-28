@@ -1,10 +1,15 @@
-name: Test Struct Definer Gem
+name: Build and Test Struct Definer Gem
 on:
   push:
     branches: [ main ]
+  pull_request:
+    branches: [ main ]
 jobs:
-  test:
+  build-and-publish:
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
@@ -15,6 +20,17 @@ jobs:
         bundler-cache: true
     - name: Configure GitHub Packages authentication
       run: |
-        bundle config set --global https://rubygems.pkg.github.com/y2kstack y2kstack:${{ secrets.GITHUB_TOKEN }}
+        echo "gem: --no-document" >> ~/.gemrc
+        echo ":github: Bearer ${{ secrets.PAT }}" > ~/.gem/credentials
+        chmod 600 ~/.gem/credentials
+    - name: Build gem
+      run: gem build struct_definer.gemspec
+    - name: Publish gem to GitHub Packages
+      run: gem push --key github --host https://rubygems.pkg.github.com/y2kstack struct_definer-*.gem
+      env:
+        GEM_HOST_API_KEY: Bearer ${{ secrets.PAT }}
     - name: Install dependencies
       run: bundle install
+    - name: Run tests
+      run: |
+        bundle exec ruby -e "require 'struct_definer'; user = StructDefiner::User.new(name: 'Test', email: 'test@example.com'); puts user.serialize"
