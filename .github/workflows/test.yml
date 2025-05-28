@@ -1,0 +1,27 @@
+name: Test Struct Definer Gem
+on:
+  push:
+    branches: [ main ]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: '3.0'
+        bundler-cache: true
+    - name: Configure GitHub Packages authentication
+      run: |
+        echo "source 'https://rubygems.pkg.github.com/y2kstack' do" >> Gemfile
+        echo "  gem 'struct_definer', '0.1.0'" >> Gemfile
+        echo "end" >> Gemfile
+        echo "gem 'struct_definer', '0.1.0'" >> Gemfile.lock
+        bundle config https://rubygems.pkg.github.com/y2kstack y2kstack:${{ secrets.GITHUB_TOKEN }}
+    - name: Install dependencies
+      run: bundle install
+    - name: Run tests
+      run: |
+        echo "require 'struct_definer'; user = StructDefiner::User.new(name: 'Test', email: 'test@example.com'); puts user.serialize" | ruby

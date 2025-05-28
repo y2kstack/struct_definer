@@ -13,14 +13,11 @@ Gem::Specification.new do |spec|
   spec.license     = "MIT"
   spec.required_ruby_version = ">= 2.5.0"
 
-  # IMPORTANT for GitHub Packages:
-  # If your Rubygems version is >= 3.3.7
-  # This is the owner of the package on GitHub (your username or org name)
+
   spec.metadata["allowed_push_host"] = "https://rubygems.pkg.github.com/y2kstack" # CHANGE THIS
 
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = "https://github.com/y2kstack/struct_definer" # CHANGE THIS
-  # spec.metadata["changelog_uri"] = "PUT_YOUR_CHANGELOG_URI_HERE" # Optional
 
   spec.files = Dir.chdir(__dir__) do
     `git ls-files -z`.split("\x0").reject do |f|
@@ -30,7 +27,4 @@ Gem::Specification.new do |spec|
   spec.bindir        = "exe"
   spec.executables   = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
-
-  # For more information and examples about making a new gem, check out our
-  # guide at: https://bundler.io/guides/creating_gem.html
 end
