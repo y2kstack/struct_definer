@@ -13,6 +13,7 @@ module StructDefiner
       { name: @name, email: @email }.to_json
     end
     def self.deserialize(data)
+      puts "hello world"
       parsed = JSON.parse(data)
       new(name: parsed["name"], email: parsed["email"])
     end
