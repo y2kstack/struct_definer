@@ -30,7 +30,7 @@ jobs:
         mkdir -p pkg
         gem build struct_definer.gemspec --output pkg/struct_definer-${{ github.sha }}.gem
     - name: Publish gem to GitHub Packages
-      run: gem push --key github --host https://rubygems.pkg.github.com/y2kstack pkg/struct_definer-.gem
+      run: gem push --key github --host https://rubygems.pkg.github.com/y2kstack pkg/struct_definer-${{ github.sha }}.gem
     - name: Install dependencies
       run: bundle install
     - name: Run tests
