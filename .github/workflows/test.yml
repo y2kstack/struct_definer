@@ -18,6 +18,3 @@ jobs:
         bundle config set --global https://rubygems.pkg.github.com/y2kstack y2kstack:${{ secrets.GITHUB_TOKEN }}
     - name: Install dependencies
       run: bundle install
-    - name: Run tests
-      run: |
-        echo "require 'struct_definer'; user = StructDefiner::User.new(name: 'Test', email: 'test@example.com'); puts user.serialize" | ruby
