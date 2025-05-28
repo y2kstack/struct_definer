@@ -18,17 +18,19 @@ jobs:
       with:
         ruby-version: '3.0'
         bundler-cache: true
+    - name: Configure GitHub Packages authentication
+      run: |
+        mkdir -p ~/.gem
+        echo "gem: --no-document" > ~/.gemrc
+        echo ":github: Bearer ${{ secrets.PAT }}" > ~/.gem/credentials
+        chmod 600 ~/.gem/credentials
+        cat ~/.gem/credentials | sed 's/Bearer ./Bearer [REDACTED]/'
     - name: Build gem
       run: |
-        gem build struct_definer.gemspec
         mkdir -p pkg
-        mv struct_definer-*.gem pkg/
+        gem build struct_definer.gemspec --output pkg/struct_definer-${{ github.sha }}.gem
     - name: Publish gem to GitHub Packages
-      env:
-        GEM_HOST_API_KEY: ${{ secrets.MY_PAT }}
-      run: gem push --host https://rubygems.pkg.github.com/y2kstack struct_definer-*.gem
-    - name: Debug secrets
-      run: echo "GEM_HOST_API_KEY is ${GEM_HOST_API_KEY:+set}"
+      run: gem push --force --key github --host https://rubygems.pkg.github.com/y2kstack pkg/struct_definer-.gem
     - name: Install dependencies
       run: bundle install
     - name: Run tests
