@@ -27,6 +27,8 @@ jobs:
       env:
         GEM_HOST_API_KEY: ${{ secrets.MY_PAT }}
       run: gem push pkg/struct_definer-*.gem --host https://rubygems.pkg.github.com/y2kstack
+    - name: Debug secrets
+      run: echo "GEM_HOST_API_KEY is ${GEM_HOST_API_KEY:+set}"
     - name: Install dependencies
       run: bundle install
     - name: Run tests
