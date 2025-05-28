@@ -15,11 +15,7 @@ jobs:
         bundler-cache: true
     - name: Configure GitHub Packages authentication
       run: |
-        echo "source 'https://rubygems.pkg.github.com/y2kstack' do" >> Gemfile
-        echo "  gem 'struct_definer', '0.1.0'" >> Gemfile
-        echo "end" >> Gemfile
-        echo "gem 'struct_definer', '0.1.0'" >> Gemfile.lock
-        bundle config https://rubygems.pkg.github.com/y2kstack y2kstack:${{ secrets.GITHUB_TOKEN }}
+        bundle config set --global https://rubygems.pkg.github.com/y2kstack y2kstack:${{ secrets.GITHUB_TOKEN }}
     - name: Install dependencies
       run: bundle install
     - name: Run tests
